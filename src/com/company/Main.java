@@ -2,27 +2,28 @@ package com.company;
 
 import redis.clients.jedis.Jedis;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 	// write your code here
         Jedis jedis = new Jedis("localhost");
         System.out.println("Successful ping "+jedis.ping());
-        jedis.set("selvaram", "indix");
-        System.out.println(jedis.get("selvaram"));
-        jedis.lpush("selvaram2", "kpm");
-        jedis.lpush("selvaram2", "dolphin");
-        jedis.lpush("selvaram2", "tce");
-        jedis.lpush("selvaram2", "tw");
-        jedis.lpush("selvaram2", "indix");
+        long start = System.currentTimeMillis();
 
-        List<String> selvaram = jedis.lrange("selvaram2", 0, 5);
+        jedis.set("selva", "indix");
+        System.out.println("selva->"+jedis.get("selva"));
 
-        for (int i = 0; i < selvaram.size(); i++) {
-            System.out.println(selvaram.get(i));
-        }
+        System.out.println("Elapsed time in ms : "+(System.currentTimeMillis() - start));
+
+        MySqlConnect.process();
+        MySqlConnect.addData("selva", "indix");
+        MySqlConnect.getMap("selva");
+        MySqlConnect.closeCon();
+
+        System.out.println("Time elapsed for mysql in ms :"+MySqlConnect.l);
 
     }
 }
