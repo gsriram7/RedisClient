@@ -6,26 +6,26 @@ public class MySqlConnect {
     public static Connection connection;
     public static PreparedStatement preparedStatement;
     public static ResultSet resultSet;
-    public static long l;
+    public static long l=0;
 
 
     public static void addData(String name, String map) throws SQLException{
 
-        l = System.currentTimeMillis();
         String stmt = "Insert into test values(?, ?)";
         preparedStatement = connection.prepareStatement(stmt);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, map);
+        long start = System.currentTimeMillis();
         preparedStatement.execute();
-        l = System.currentTimeMillis() - l;
+        l += System.currentTimeMillis() - start;
 
     }
 
     public static void getMap(String name) {
         try {
-            long start = System.currentTimeMillis();
             preparedStatement = connection.prepareStatement("select map from test where name = ?");
             preparedStatement.setString(1, name);
+            long start = System.currentTimeMillis();
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next())
                 System.out.println(name +"->"+ resultSet.getString("map"));
@@ -64,7 +64,7 @@ public class MySqlConnect {
         }
 
         if (connection != null) {
-            System.out.println("ntn");
+            System.out.println("");
         } else {
             System.out.println("Failed to make connection!");
         }
